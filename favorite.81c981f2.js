@@ -1,0 +1,2 @@
+const t=document.querySelector(".js-list");var n;!function(t,n){const o=t.map((({id:t,img:n,name:o})=>`\n        <li class='js-item' data-id='${t}'>\n      <img src="${n}" alt="${o}" width='300'>\n      <h2>${o}</h2>\n      <p><a class='js-info' href='#'>More info</a></p>\n    <div>\n      <button class="js-favorite">Add to favorite</button>\n      <button class="js-basket">Add to basket</button>\n    </div>\n    </li>\n    `)).join("");n.innerHTML=o}(null!==(n=JSON.parse(localStorage.getItem("favorite")))&&void 0!==n?n:[],t);
+//# sourceMappingURL=favorite.81c981f2.js.map
