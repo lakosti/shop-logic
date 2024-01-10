@@ -1,6 +1,9 @@
 import * as basicLightbox from 'basiclightbox';
 import '/node_modules/basiclightbox/dist/basicLightbox.min.css';
 
+import { common } from './common';
+import { createMarkup } from './helpers/createMarkup';
+
 const instruments = [
   {
     id: 1,
@@ -67,29 +70,14 @@ const instruments = [
       'Бензиновий генератор GX-25 номінальною потужністю 2,5 кВт забезпечить автономність побутових приладів на дачі або у приватному будинку. Ви зможете одночасно підключити до нього освітлення, холодильник, зарядку телефону, ноутбук та водяний насос.',
   },
 ];
-const search = document.querySelector('.js-search');
+
+// const search = document.querySelector('.js-search');
 const list = document.querySelector('.js-list');
+const favoriteArr = JSON.parse(localStorage.getItem(common.KEY_FAVORITE)) ?? [];
+const basketArr = JSON.parse(localStorage.getItem(common.KEY_BASKET)) ?? [];
+//якщо локал сторадж пустий він поверне нал і буде пустий масив
 
-function createMarkup(arr) {
-  const markup = arr
-    .map(
-      ({ id, img, name }) => `
-        <li class='js-item' data-id='${id}'>
-      <img src="${img}" alt="${name}" width='300'>
-      <h2>${name}</h2>
-      <p><a class='js-info' href='#'>More info</a></p>
-    <div>
-      <button>Add to favorite</button>
-      <button>Add to basket</button>
-    </div>
-    </li>
-    `
-    )
-    .join('');
-
-  list.innerHTML = markup;
-}
-createMarkup(instruments);
+createMarkup(instruments, list);
 
 list.addEventListener('click', onClick);
 
@@ -112,6 +100,25 @@ function onClick(evt) {
 </div>
 `);
     instance.show();
+  }
+  if (evt.target.classList.contains('js-basket')) {
+    // отримуємо айді
+    const { id } = evt.target.closest('.js-item').dataset;
+    const product = findProduct(Number(id));
+    //щоб зберегти обрані файли пушемо їх, і поміщаємо в локал сторадж
+    basketArr.push(product);
+    localStorage.setItem(common.KEY_BASKET, JSON.stringify(basketArr));
+  }
+  if (evt.target.classList.contains('js-favorite')) {
+    const { id } = evt.target.closest('.js-item').dataset;
+    const product = findProduct(Number(id));
+    //перевірка чи міститься уже такий об'єкт
+    const inStorage = favoriteArr.some(({ id }) => id === product.id);
+    if (inStorage) {
+      return;
+    }
+    favoriteArr.push(product);
+    localStorage.setItem(common.KEY_FAVORITE, JSON.stringify(favoriteArr));
   }
 }
 
