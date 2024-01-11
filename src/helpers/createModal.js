@@ -20,6 +20,7 @@ function createModal(product) {
     {
       handler: null,
       onShow(instance) {
+        //байнд повертає копію з привязаним зіз і записує у this.handler
         this.handler = closeModal.bind(instance);
         document.addEventListener('keydown', this.handler);
       },
