@@ -31,5 +31,4 @@ function createModal(product) {
   );
   instance.show();
 }
-
 export { createModal };
